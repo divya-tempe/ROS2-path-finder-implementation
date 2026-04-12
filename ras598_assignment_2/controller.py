@@ -36,13 +36,13 @@ class PathController:
 
     def __init__(
         self,
-        linear_speed: float = 0.4,
-        angular_gain: float = 1.5,
-        max_linear_speed: float = 0.4,
-        max_angular_speed: float = 1.0,
-        waypoint_tolerance: float = 0.3,
+        linear_speed: float = 1.4,
+        angular_gain: float = 2.0,
+        max_linear_speed: float = 1.4,
+        max_angular_speed: float = 1.5,
+        waypoint_tolerance: float = 0.6,
         goal_tolerance: float = 0.3,
-        heading_threshold: float = 0.35,
+        heading_threshold: float = 0.45,
         heading_deadband: float = 0.05
     ) -> None:
         """
@@ -260,7 +260,10 @@ class PathController:
         # Step 2: if already close enough to target, stop
         # --------------------------------------------------------------
         if distance_error <= self.waypoint_tolerance:
-            return self.make_stop_cmd()
+            cmd.linear.x = 0.8
+            cmd.angular.z = 1.8
+            return cmd
+            #return self.make_stop_cmd()
 
         # --------------------------------------------------------------
         # Step 3: compute angular velocity
@@ -279,7 +282,7 @@ class PathController:
         # This reduces wide arcs and makes behavior easier to tune.
         # --------------------------------------------------------------
         if abs(heading_error) > self.heading_threshold:
-            cmd.linear.x = 0.0
+            cmd.linear.x = 0.8
             cmd.angular.z = angular_z
             return cmd
 
