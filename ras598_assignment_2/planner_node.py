@@ -100,13 +100,13 @@ class PlannerNode(Node):
         )
 
         self.path_controller = PathController(
-            linear_speed=0.4,
-            angular_gain=1.5,
-            max_linear_speed=0.4,
-            max_angular_speed=1.0,
+            linear_speed=1.6,
+            angular_gain=1.8,
+            max_linear_speed=1.6,
+            max_angular_speed=2.0,
             waypoint_tolerance=0.3,
-            goal_tolerance=0.3,
-            heading_threshold=0.35,
+            goal_tolerance=0.2,
+            heading_threshold=0.5,
             heading_deadband=0.05
         )
 
@@ -484,8 +484,14 @@ class PlannerNode(Node):
                 return
 
             # Get the current target waypoint
-            current_target_world = self.get_current_target_waypoint()
+            # lookahead = 2
+            # target_index = min(
+            #     self.current_waypoint_index + lookahead,
+            #     len(self.pruned_path_world) - 1
+            # )
+            current_target_world = self.pruned_path_world[self.current_waypoint_index]
 
+            
             if current_target_world is None:
                 self.goal_reached = True
                 self.state = self.GOAL_REACHED
